@@ -1,26 +1,27 @@
-import React from 'react';
+// src/navigation/AppNavigator.js
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { AuthContext } from '../context/AuthContext';
+import AuthStack from './AuthStack';
+import MainTabNavigator from './MainTabNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from '../screens/HomeScreen/HomeScreen';
-import OfferScreen from '../screens/OffersScreen/OfferScreen';
-import MatchScreen from '../screens/MatchScreen/MatchScreen';
-import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
-import LoginScreen from '../screens/LoginSignUpScreen/LoginScreen';
-import RegisterScreen from '../screens/LoginSignUpScreen/RegisterScreen';
 
 const Stack = createStackNavigator();
 
-export default function AppNavigator() {
+const AppNavigator = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Offer" component={OfferScreen} />
-        <Stack.Screen name="Match" component={MatchScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-      </Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {user ? (
+        <Stack.Screen name="Main" component={MainTabNavigator} />
+      ) : (
+        <Stack.Screen name="Auth" component={AuthStack} />
+      )}
+    </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default AppNavigator;
