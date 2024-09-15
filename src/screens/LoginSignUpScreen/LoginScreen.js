@@ -1,6 +1,5 @@
-// src/screens/LoginScreen.js
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, Text, Button as RNButton } from 'react-native';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
@@ -8,31 +7,56 @@ import { AuthContext } from '../../context/AuthContext';
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const { login } = useContext(AuthContext);
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!email) {
+      newErrors.email = 'El email es obligatorio';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email inválido';
+    }
+
+    if (!password) {
+      newErrors.password = 'La contraseña es obligatoria';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleLogin = () => {
-    login(email, password);
-    navigation.replace('Home'); 
+    if (validateForm()) {
+      login(email, password);
+      navigation.replace('Home');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Iniciar Sesión</Text>
+
       <Input
         label="Email"
         value={email}
         onChangeText={setEmail}
-        placeholder="Enter your email"
+        placeholder="Ingrese su email"
       />
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
       <Input
-        label="Password"
+        label="Contraseña"
         value={password}
         onChangeText={setPassword}
-        placeholder="Enter your password"
+        placeholder="Ingrese su contraseña"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Go to Register" onPress={() => navigation.navigate('Register')} />
+      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+
+      <Button title="Iniciar Sesión" onPress={handleLogin} />
+      <RNButton title="Registrarse" onPress={() => navigation.navigate('Register')} />
     </View>
   );
 };
@@ -47,6 +71,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
   },
 });
 

@@ -1,38 +1,98 @@
-// src/screens/RegisterScreen.js
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Button as RNButton } from 'react-native';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 
 const RegisterScreen = ({ navigation }) => {
+  const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const { register } = useContext(AuthContext);
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!companyName) {
+      newErrors.companyName = 'El nombre de la empresa es obligatorio';
+    }
+
+    if (!email) {
+      newErrors.email = 'El email es obligatorio';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email inválido';
+    }
+
+    if (!password) {
+      newErrors.password = 'La contraseña es obligatoria';
+    } else if (password.length < 6) {
+      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+    }
+
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Las contraseñas no coinciden';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleRegister = () => {
-    login(email, password);
-    navigation.replace('Home');
+    if (validateForm()) {
+      const userData = {
+        companyName,
+        email,
+        password,
+      };
+      // Llamada al contexto de autenticación para registrar al usuario
+      register(userData);
+      navigation.replace('Home');
+    }
   };
+  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Registro de Empresa</Text>
+
+      <Input
+        label="Nombre de la Empresa"
+        value={companyName}
+        onChangeText={setCompanyName}
+        placeholder="Ingrese el nombre de la empresa"
+      />
+      {errors.companyName && <Text style={styles.errorText}>{errors.companyName}</Text>}
+
       <Input
         label="Email"
         value={email}
         onChangeText={setEmail}
-        placeholder="Enter your email"
+        placeholder="Ingrese su email"
       />
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
       <Input
-        label="Password"
+        label="Contraseña"
         value={password}
         onChangeText={setPassword}
-        placeholder="Enter your password"
+        placeholder="Ingrese su contraseña"
         secureTextEntry
       />
-      <Button title="Register" onPress={handleRegister} />
-      <Button title="Go to Login" onPress={() => navigation.navigate('Login')} />
+      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+
+      <Input
+        label="Confirmar Contraseña"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        placeholder="Confirme su contraseña"
+        secureTextEntry
+      />
+      {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+
+      <Button title="Registrarse" onPress={handleRegister} />
+      <RNButton title="Iniciar sesión" onPress={() => navigation.navigate('Login')} />
     </View>
   );
 };
@@ -47,6 +107,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
   },
 });
 

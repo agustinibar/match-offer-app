@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
+import CreateOffer from '../../components/CreateOffer/CreateOffer';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('');
@@ -14,9 +15,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Input label="Name" value={name} onChangeText={setName} placeholder="Enter your name" />
-      <Input label="Email" value={email} onChangeText={setEmail} placeholder="Enter your email" />
-      <Button title="Save Profile" onPress={handleSave} />
+      <CreateOffer/>
     </View>
   );
 };

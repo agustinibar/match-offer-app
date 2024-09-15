@@ -1,19 +1,25 @@
 // screens/MatchScreen.js
-import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import { AppContext } from '../../context/AppContext'; 
 import OfferCard from '../../components/Cards/OfferCard';
 
-const offers = [
-  { title: '50% off Pizza', description: 'Best pizza in town!', image: 'https://via.placeholder.com/150' },
-  { title: 'Buy 1 Get 1 Free', description: 'Amazing burgers!', image: 'https://via.placeholder.com/150' },
-];
-
 const MatchScreen = () => {
+  const { offers, loadingOffers } = useContext(AppContext);
+
+  if (loadingOffers) {
+    return <Text>Cargando ofertas...</Text>;
+  }
+
   return (
     <ScrollView style={styles.container}>
-      {offers.map((offer, index) => (
-        <OfferCard key={index} offer={offer} />
-      ))}
+      {offers.length > 0 ? (
+        offers.map((offer) => (
+          <OfferCard key={offer._id} offer={offer} />
+        ))
+      ) : (
+        <Text>No hay ofertas disponibles</Text>
+      )}
     </ScrollView>
   );
 };
@@ -26,3 +32,4 @@ const styles = StyleSheet.create({
 });
 
 export default MatchScreen;
+
