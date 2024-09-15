@@ -11,7 +11,6 @@ const RegisterScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
 
   const handleRegister = () => {
-    // Aquí puedes agregar la lógica de registro
     login(email, password);
     navigation.replace('Home');
   };

@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     login(email, password);
-    navigation.replace('Home'); // Navegar al Home después de iniciar sesión
+    navigation.replace('Home'); 
   };
 
   return (
