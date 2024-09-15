@@ -1,0 +1,18 @@
+*Sprint 1 (3-5 días):*
+
+-Configurar la estructura del proyecto y la navegación.
+-Implementar pantallas básicas: Login, Registro, Ofertas, Match, Perfil.
+-Crear componentes reutilizables como Card, Button, Input.
+-Configurar Context API para la gestión de estados globales.
+
+*Sprint 2 (5-7 días):*
+
+-Integrar la API para obtener ofertas y hacer el match.
+-Optimizar el rendimiento del manejo de estado.
+-Implementar la funcionalidad completa de las ofertas y el match (back y front).
+
+*Sprint 3 (5-7 días):*
+
+-Mejorar la interfaz de usuario con estilos pulidos.
+-Añadir validaciones de formularios y autenticación.
+-Realizar pruebas unitarias y de integración.
