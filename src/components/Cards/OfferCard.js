@@ -1,14 +1,19 @@
 // components/OfferCard.js
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import logo from '../../assets/t.jpg';
 
-const OfferCard = ({ offer }) => {
+const OfferCard = ({ offer, onPass, onMatch }) => {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: offer.image }} style={styles.image} />
+      <Image source={logo} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{offer.title}</Text>
         <Text style={styles.description}>{offer.description}</Text>
+      </View>
+      <View style={styles.buttonsContainer}>
+        <Button title="Pasar" onPress={onPass} />
+        <Button title="Matchear" onPress={onMatch} />
       </View>
     </View>
   );
@@ -35,6 +40,11 @@ const styles = StyleSheet.create({
   description: {
     color: '#888',
     marginTop: 4,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
   },
 });
 

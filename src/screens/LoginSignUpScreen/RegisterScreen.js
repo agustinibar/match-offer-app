@@ -5,7 +5,7 @@ import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 
 const RegisterScreen = ({ navigation }) => {
-  const [companyName, setCompanyName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,8 +15,8 @@ const RegisterScreen = ({ navigation }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!companyName) {
-      newErrors.companyName = 'El nombre de la empresa es obligatorio';
+    if (!name) {
+      newErrors.name = 'El nombre es obligatorio';
     }
 
     if (!email) {
@@ -39,31 +39,29 @@ const RegisterScreen = ({ navigation }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = () => {
+  const handleRegister = (type) => {
     if (validateForm()) {
       const userData = {
-        companyName,
+        name,
         email,
         password,
       };
-      // Llamada al contexto de autenticación para registrar al usuario
-      register(userData);
+      register(userData, type);
       navigation.replace('Home');
     }
   };
-  
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Registro de Empresa</Text>
+      <Text style={styles.title}>Registro</Text>
 
       <Input
-        label="Nombre de la Empresa"
-        value={companyName}
-        onChangeText={setCompanyName}
-        placeholder="Ingrese el nombre de la empresa"
+        label="Nombre"
+        value={name}
+        onChangeText={setName}
+        placeholder="Ingrese su nombre o el nombre de la empresa"
       />
-      {errors.companyName && <Text style={styles.errorText}>{errors.companyName}</Text>}
+      {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
       <Input
         label="Email"
@@ -91,7 +89,8 @@ const RegisterScreen = ({ navigation }) => {
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
 
-      <Button title="Registrarse" onPress={handleRegister} />
+      <Button title="Registrar Cliente" onPress={() => handleRegister('customer')} />
+      <Button title="Registrar Empresa" onPress={() => handleRegister('company')} />
       <RNButton title="Iniciar sesión" onPress={() => navigation.navigate('Login')} />
     </View>
   );
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 8,
   },
 });
 

@@ -8,6 +8,7 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [userType, setUserType] = useState('customer'); // Default to 'customer'
   const { login } = useContext(AuthContext);
 
   const validateForm = () => {
@@ -29,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (validateForm()) {
-      login(email, password);
+      login(email, password, userType);
       navigation.replace('Home');
     }
   };
@@ -55,6 +56,11 @@ const LoginScreen = ({ navigation }) => {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
+      <View style={styles.buttonContainer}>
+        <Button title="Iniciar Sesión como Empresa" onPress={() => setUserType('company')} />
+        <Button title="Iniciar Sesión como Cliente" onPress={() => setUserType('customer')} />
+      </View>
+
       <Button title="Iniciar Sesión" onPress={handleLogin} />
       <RNButton title="Registrarse" onPress={() => navigation.navigate('Register')} />
     </View>
@@ -76,6 +82,11 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 12,
     marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
   },
 });
 

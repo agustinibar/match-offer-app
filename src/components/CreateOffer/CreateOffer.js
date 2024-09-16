@@ -12,6 +12,7 @@ const CreateOffer = () => {
   const [category, setCategory] = useState('');
   const [errors, setErrors] = useState({});
 
+  console.log(user.token)
 
   const validateForm = () => {
     const newErrors = {};

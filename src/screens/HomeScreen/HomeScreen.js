@@ -1,33 +1,49 @@
 // src/screens/HomeScreen.js
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import OfferCard from '../../components/Cards/OfferCard';
+import { AppContext } from '../../context/AppContext';
 
 const HomeScreen = () => {
+  const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer } = useContext(AppContext);
+
+  if (loadingOffers) {
+    return <Text>Cargando ofertas...</Text>;
+  }
+
+  const handlePass = () => {
+    passOffer();
+  };
+
+  const handleMatch = () => {
+    if (offers[currentOfferIndex]) {
+      matchOffer(offers[currentOfferIndex]._id);
+    }
+  };
+
+  if (offers.length === 0) {
+    return <Text>No hay ofertas disponibles</Text>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Match Offers!</Text>
-      <Text style={styles.subtitle}>Explore the latest offers below.</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      {offers.length > 0 && offers[currentOfferIndex] ? (
+        <OfferCard
+          offer={offers[currentOfferIndex]}
+          onPass={handlePass}
+          onMatch={handleMatch}
+        />
+      ) : (
+        <Text>No hay más ofertas por el momento</Text>
+      )}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#666',
+    padding: 16,
   },
 });
 
