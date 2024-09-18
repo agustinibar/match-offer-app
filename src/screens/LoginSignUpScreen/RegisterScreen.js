@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, Button as RNButton } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
@@ -53,6 +53,7 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../assets/t.jpg')} style={styles.logo} />
       <Text style={styles.title}>Registro</Text>
 
       <Input
@@ -60,6 +61,7 @@ const RegisterScreen = ({ navigation }) => {
         value={name}
         onChangeText={setName}
         placeholder="Ingrese su nombre o el nombre de la empresa"
+        style={styles.input}
       />
       {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
@@ -68,6 +70,7 @@ const RegisterScreen = ({ navigation }) => {
         value={email}
         onChangeText={setEmail}
         placeholder="Ingrese su email"
+        style={styles.input}
       />
       {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
@@ -77,6 +80,7 @@ const RegisterScreen = ({ navigation }) => {
         onChangeText={setPassword}
         placeholder="Ingrese su contraseña"
         secureTextEntry
+        style={styles.input}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
@@ -86,12 +90,16 @@ const RegisterScreen = ({ navigation }) => {
         onChangeText={setConfirmPassword}
         placeholder="Confirme su contraseña"
         secureTextEntry
+        style={styles.input}
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
 
-      <Button title="Registrar Cliente" onPress={() => handleRegister('customer')} />
-      <Button title="Registrar Empresa" onPress={() => handleRegister('company')} />
-      <RNButton title="Iniciar sesión" onPress={() => navigation.navigate('Login')} />
+      <Button title="Registrar Cliente" onPress={() => handleRegister('customer')} style={styles.button} />
+      <Button title="Registrar Empresa" onPress={() => handleRegister('company')} style={styles.button} />
+      
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginButton}>
+        <Text style={styles.loginText}>¿Ya tienes cuenta? Inicia sesión</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -101,16 +109,39 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
+    backgroundColor: '#ffffff', 
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    alignSelf: 'center',
+    marginBottom: 24,
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    fontWeight: 'bold',
+    marginBottom: 24,
     textAlign: 'center',
+    color: '#333333', 
+  },
+  input: {
+    marginBottom: 12,
   },
   errorText: {
-    color: 'red',
+    color: '#e74c3c', 
     fontSize: 12,
-    marginBottom: 8,
+    marginBottom: 12,
+  },
+  button: {
+    marginVertical: 8,
+  },
+  loginButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  loginText: {
+    color: '#3498db', 
+    fontSize: 16,
   },
 });
 

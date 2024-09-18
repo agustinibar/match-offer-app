@@ -1,7 +1,6 @@
-// components/OfferCard.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
-import logo from '../../assets/t.jpg';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import logo from '../../assets/t.jpg'; // Asegúrate de que esta ruta sea correcta
 
 const OfferCard = ({ offer, onPass, onMatch }) => {
   return (
@@ -12,8 +11,12 @@ const OfferCard = ({ offer, onPass, onMatch }) => {
         <Text style={styles.description}>{offer.description}</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <Button title="Pasar" onPress={onPass} />
-        <Button title="Matchear" onPress={onMatch} />
+        <TouchableOpacity style={styles.button} onPress={onPass}>
+          <Text style={styles.buttonText}>Pasar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onMatch}>
+          <Text style={styles.buttonText}>Matchear</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -21,14 +24,20 @@ const OfferCard = ({ offer, onPass, onMatch }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff', // Fondo blanco para el card
     borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 16,
+    shadowColor: '#000', // Sombra para una mejor visibilidad
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // Solo en Android
   },
   image: {
     height: 150,
     width: '100%',
+    resizeMode: 'cover', // Mantiene la relación de aspecto de la imagen
   },
   info: {
     padding: 16,
@@ -36,15 +45,31 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 18,
+    color: '#333', 
   },
   description: {
-    color: '#888',
+    color: '#666', 
     marginTop: 4,
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0', 
+  },
+  button: {
+    backgroundColor: '#3498db',
+    padding: 12,
+    borderRadius: 4,
+    flex: 1,
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff', 
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

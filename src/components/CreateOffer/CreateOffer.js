@@ -1,18 +1,16 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { AppContext } from '../../context/AppContext';
 import { AuthContext } from '../../context/AuthContext';
 
 const CreateOffer = () => {
   const { setOffers } = useContext(AppContext);
-  const { user } = useContext(AuthContext); // Obtener el usuario autenticado, tiene dos elementos: company{} y token""
+  const { user } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [errors, setErrors] = useState({});
-
-  console.log(user.token)
 
   const validateForm = () => {
     const newErrors = {};
@@ -47,7 +45,7 @@ const CreateOffer = () => {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user.token}`, 
-          },  
+          },
           body: JSON.stringify(offerData),
         });
 
@@ -68,8 +66,9 @@ const CreateOffer = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear Oferta</Text>
+
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.title && styles.errorInput]}
         placeholder="Título de la oferta"
         value={title}
         onChangeText={setTitle}
@@ -77,15 +76,17 @@ const CreateOffer = () => {
       {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.description && styles.errorInput]}
         placeholder="Descripción de la oferta"
         value={description}
         onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
       />
       {errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.price && styles.errorInput]}
         placeholder="Precio"
         value={price}
         onChangeText={setPrice}
@@ -94,14 +95,16 @@ const CreateOffer = () => {
       {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.category && styles.errorInput]}
         placeholder="Categoría"
         value={category}
         onChangeText={setCategory}
       />
       {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
 
-      <Button title="Crear Oferta" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Crear Oferta</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -110,24 +113,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F9F9F9',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#333',
     marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     height: 50,
-    borderColor: '#ddd',
+    borderColor: '#ccc',
     borderWidth: 1,
+    borderRadius: 8,
     marginBottom: 15,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    fontSize: 16,
+  },
+  errorInput: {
+    borderColor: '#E94F4F',
   },
   errorText: {
-    color: 'red',
+    color: '#E94F4F',
     fontSize: 12,
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

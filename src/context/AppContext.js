@@ -15,24 +15,30 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await fetch('http://localhost:3001/offers');
+        const response = await fetch('http://localhost:3001/offers', {
+          headers: {
+            Authorization: `Bearer ${user.token}` 
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           setOffers(data);
+          setLoadingOffers(false); 
         } else {
-          console.error('Error fetching offers');
+          console.error('Error al obtener las ofertas:', response.status);
+          setLoadingOffers(false); 
         }
       } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoadingOffers(false);
+        console.error('Error en el fetch de ofertas:', error);
+        setLoadingOffers(false); 
       }
     };
-
+  
     fetchOffers();
-  }, []);
+  }, [user, matches]); 
+  
 
-  // Fetch de los matches del usuario
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
@@ -57,19 +63,19 @@ const AppProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Filtrar ofertas que ya han sido matcheadas
+
   const filteredOffers = offers.filter((offer) => {
     return !matches.some((match) => match.offer._id === offer._id);
   });
 
-  // Pasar a la siguiente oferta
+
   const passOffer = () => {
     setCurrentOfferIndex((prevIndex) => {
       return prevIndex + 1 < filteredOffers.length ? prevIndex + 1 : 0;
     });
   };
 
-  // Hacer match con una oferta
+
   const matchOffer = async (offerId) => {
     try {
       const response = await fetch('http://localhost:3001/match/create', {
@@ -80,15 +86,20 @@ const AppProvider = ({ children }) => {
         },
         body: JSON.stringify({ offerId }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         console.log('Match creado exitosamente:', data);
-        passOffer(); // Pasa a la siguiente oferta después de hacer match
+        
+
+        setOffers((prevOffers) => prevOffers.filter(offer => offer._id !== offerId));
+  
+        
+        passOffer(); 
       } else if (response.status === 400 && data.message === 'El match ya existe') {
         console.log('El match ya existe, pasando a la siguiente oferta');
-        passOffer(); // Si el match ya existe, pasa a la siguiente oferta
+        passOffer(); 
       } else {
         console.error('Error al crear el match:', data.message);
       }

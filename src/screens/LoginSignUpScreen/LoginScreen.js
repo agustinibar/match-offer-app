@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, Button as RNButton } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
+  const { userType } = route.params; // Recibe el tipo de usuario desde la ruta
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [userType, setUserType] = useState('customer'); // Default to 'customer'
   const { login } = useContext(AuthContext);
 
   const validateForm = () => {
@@ -30,20 +30,22 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (validateForm()) {
-      login(email, password, userType);
+      login(email, password, userType); // Pasa el tipo de usuario a la función de login
       navigation.replace('Home');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+      <Image source={require('../../assets/t.jpg')} style={styles.logo} />
+      <Text style={styles.title}>Iniciar Sesión {userType === 'company' ? 'como Empresa' : 'como Cliente'}</Text>
 
       <Input
         label="Email"
         value={email}
         onChangeText={setEmail}
         placeholder="Ingrese su email"
+        style={styles.input}
       />
       {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
@@ -53,16 +55,15 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         placeholder="Ingrese su contraseña"
         secureTextEntry
+        style={styles.input}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
-      <View style={styles.buttonContainer}>
-        <Button title="Iniciar Sesión como Empresa" onPress={() => setUserType('company')} />
-        <Button title="Iniciar Sesión como Cliente" onPress={() => setUserType('customer')} />
-      </View>
+      <Button title="Iniciar Sesión" onPress={handleLogin} style={styles.button} />
 
-      <Button title="Iniciar Sesión" onPress={handleLogin} />
-      <RNButton title="Registrarse" onPress={() => navigation.navigate('Register')} />
+      <TouchableOpacity onPress={() => navigation.navigate('Register', { userType })} style={styles.registerButton}>
+        <Text style={styles.registerText}>¿No tienes cuenta? Regístrate</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -72,21 +73,39 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
+    backgroundColor: '#ffffff', // Fondo blanco limpio
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    alignSelf: 'center',
+    marginBottom: 24,
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    fontWeight: 'bold',
+    marginBottom: 24,
     textAlign: 'center',
+    color: '#333333', // Color de texto oscuro
+  },
+  input: {
+    marginBottom: 12,
   },
   errorText: {
-    color: 'red',
+    color: '#e74c3c', // Rojo para errores
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 12,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+  button: {
+    marginVertical: 16,
+  },
+  registerButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  registerText: {
+    color: '#3498db', // Color de texto azul para el botón de registro
+    fontSize: 16,
   },
 });
 
