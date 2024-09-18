@@ -1,4 +1,3 @@
-// src/screens/HomeScreen.js
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import OfferCard from '../../components/Cards/OfferCard';
@@ -27,7 +26,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {offers.length > 0 && offers[currentOfferIndex] ? (
+      {currentOfferIndex < offers.length ? (
         <OfferCard
           offer={offers[currentOfferIndex]}
           onPass={handlePass}
