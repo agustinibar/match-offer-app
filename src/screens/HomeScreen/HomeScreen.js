@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import OfferCard from '../../components/Cards/OfferCard';
 import { AppContext } from '../../context/AppContext';
-
 const HomeScreen = () => {
   const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer } = useContext(AppContext);
+
+  console.log("Offers in HomeScreen:", offers); // Verifica si estás recibiendo ofertas
+  console.log("Current Offer Index:", currentOfferIndex); // Verifica el índice actual
 
   if (loadingOffers) {
     return (

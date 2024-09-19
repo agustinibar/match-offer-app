@@ -1,9 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 import { AppContext } from '../../context/AppContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 const MatchScreen = () => {
-  const { matches } = useContext(AppContext);
+  const { matches, fetchMatches } = useContext(AppContext);
+
+  // Hook para ejecutar cuando la pantalla toma foco
+  useFocusEffect(
+    useCallback(() => {
+      fetchMatches();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

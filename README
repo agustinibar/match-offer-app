@@ -1,18 +1,58 @@
-*Sprint 1 (3-5 días):*
+*Sprint 1-a (1-2 días):*
 
 -Configurar la estructura del proyecto y la navegación.
 -Implementar pantallas básicas: Login, Registro, Ofertas, Match, Perfil.
 -Crear componentes reutilizables como Card, Button, Input.
 -Configurar Context API para la gestión de estados globales.
 
-*Sprint 2 (5-7 días):*
+*Sprint 1-b (2 días):*
 
 -Integrar la API para obtener ofertas y hacer el match.
 -Optimizar el rendimiento del manejo de estado.
 -Implementar la funcionalidad completa de las ofertas y el match (back y front).
 
-*Sprint 3 (5-7 días):*
+*Sprint 1-c (2-3 días):*
 
 -Mejorar la interfaz de usuario con estilos pulidos.
 -Añadir validaciones de formularios y autenticación.
 -Realizar pruebas unitarias y de integración.
+
+==========================================================================================
+
+*Sprint 2-a (1-2 días):*
+//Objetivo: Asegurar que la app gestione eficientemente los datos, tanto de ofertas como de matches.//
+------------------------------------------------------------------------------------------
+Optimizar llamadas a la API:
+-Revisar las solicitudes de fetchOffers y fetchMatches para minimizar llamadas redundantes.
+-Implementar una estrategia de cacheado para los datos que no cambian frecuentemente.
+-Añadir manejo de errores más detallado para garantizar una mejor experiencia de usuario en caso de fallos en la API.
+------------------------------------------------------------------------------------------
+Manejo eficiente de estados:
+-Revisar y ajustar la lógica de manejo de filteredOffers para que sea reactiva y eficiente, evitando re-renderizados innecesarios.
+-Usar useMemo o useCallback donde sea necesario para optimizar la performance.
+-Implementar debouncing en las interacciones que hagan llamadas a la API (ej. matchOffer) para evitar múltiples solicitudes accidentales.
+------------------------------------------------------------------------------------------
+
+
+*Sprint 2-b (2-3 días):* 
+//Objetivo: Implementar mejoras funcionales y optimizar la experiencia de usuario.//
+------------------------------------------------------------------------------------------
+Pantalla de resultados y feedback:
+-Crear una pantalla o modal para mostrar el resultado del match de manera atractiva y visual, por ejemplo, cuando se hace un 'match' con una oferta.
+-Añadir animaciones suaves para transiciones entre ofertas (aceptar/rechazar).
+-Si no hay ofertas disponibles, mejorar la pantalla de "no hay más ofertas" con un diseño más amigable.
+------------------------------------------------------------------------------------------
+Optimizar carga inicial:
+-Mostrar una pantalla inicial mejorada mientras las ofertas se están cargando, con un diseño visualmente atractivo.
+-Implementar una precarga o carga optimizada de imágenes (si es necesario) para que la app funcione de forma más rápida en dispositivos con redes lentas.
+------------------------------------------------------------------------------------------
+Refinamiento de la navegación:
+-Implementar una navegación más fluida entre pantallas (por ejemplo, una transición visual cuando se hace match).
+-Si es necesario, añadir deep linking para que los usuarios puedan acceder a secciones específicas desde notificaciones o enlaces externos.
+------------------------------------------------------------------------------------------
+
+*Sprint 2-c (2-3 días):*
+//Objetivo: Asegurar la estabilidad del sistema y validar que todas las funcionalidades se comportan correctamente.//
+
+=========================================================================================
+
