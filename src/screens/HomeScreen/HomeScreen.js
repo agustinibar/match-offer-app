@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import OfferCard from '../../components/Cards/OfferCard';
 import { AppContext } from '../../context/AppContext';
+import { useFocusEffect } from '@react-navigation/native';
 const HomeScreen = () => {
-  const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer } = useContext(AppContext);
+  const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer, fetchMatches, user } = useContext(AppContext);
 
-  console.log("Offers in HomeScreen:", offers); // Verifica si estás recibiendo ofertas
-  console.log("Current Offer Index:", currentOfferIndex); // Verifica el índice actual
+  console.log("This is the user type:", user.company.type)
+  console.log("Offers in HomeScreen:", offers); 
+  console.log("Current Offer Index:", currentOfferIndex); 
 
   if (loadingOffers) {
     return (
@@ -21,6 +23,11 @@ const HomeScreen = () => {
     passOffer();
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchMatches();
+    }, [])
+  );
   const handleMatch = () => {
     if (offers[currentOfferIndex]) {
       matchOffer(offers[currentOfferIndex]._id);

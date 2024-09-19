@@ -31,7 +31,6 @@ const LoginScreen = ({ navigation, route }) => {
   const handleLogin = () => {
     if (validateForm()) {
       login(email, password, userType); // Pasa el tipo de usuario a la función de login
-      navigation.replace('Home');
     }
   };
 
