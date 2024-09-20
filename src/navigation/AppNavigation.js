@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import AuthStack from './AuthStack';
 import MainTabNavigator from './MainTabNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import DetailOfferScreen from '../screens/DetailScren/DetailScreen';
 
 const Stack = createStackNavigator();
 

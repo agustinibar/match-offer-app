@@ -6,6 +6,7 @@ import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import OfferScreen from '../screens/OffersScreen/OfferScreen'; // Pantalla de ofertas para empresa
 import { AuthContext } from '../context/AuthContext'; // Asegúrate de tener el contexto de autenticación
 import { NavigationContainer } from '@react-navigation/native';
+import DetailOfferScreen from '../screens/DetailScren/DetailScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,7 @@ const MainTabNavigator = () => {
         <Tab.Screen name="Home" component={HomeScreen} />
       )}
       <Tab.Screen name="MatchOffer" component={MatchOfferScreen} />
+      <Tab.Screen name="DetailOffer" component={DetailOfferScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
 

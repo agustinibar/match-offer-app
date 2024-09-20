@@ -10,6 +10,40 @@ const AppProvider = ({ children }) => {
   const [loadingOffers, setLoadingOffers] = useState(true);
   const [matches, setMatches] = useState([]);
   const [filteredOffers, setFilteredOffers] = useState([]);
+  const [companyOffers, setCompanyOffers] = useState([]); // Ofertas activas de la empresa
+
+  // Fetch de las ofertas activas de la empresa
+  const fetchCompanyOffers = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/offers', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Ofertas recibidas del backend:', data); 
+
+        const companyOffers = data.filter((offer) => {
+          console.log('Comparando:', offer.company, 'con', user.company._id); 
+          return offer.company === user.company._id; 
+        });
+  
+        console.log('Ofertas filtradas:', companyOffers);   
+        setCompanyOffers(companyOffers);
+        setLoadingOffers(false);
+      } else {
+        console.error('Error al obtener las ofertas de la empresa:', response.status);
+        setLoadingOffers(false);
+      }
+    } catch (error) {
+      console.error('Error en el fetch de ofertas de la empresa:', error);
+      setLoadingOffers(false);
+    }
+  };
+  
+  
 
   // Fetch de las ofertas
   useEffect(() => {
@@ -107,6 +141,8 @@ const AppProvider = ({ children }) => {
         fetchMatches,
         passOffer,
         matchOffer,
+        companyOffers, 
+        fetchCompanyOffers
       }}
     >
       {children}
