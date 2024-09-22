@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function DetailOfferScreen({ offerId, navigation }) {
-   // Agrega este log para ver qué params se están pasando
-     // Verifica si route.params existe
+export default function DetailOfferScreen({ route, navigation }) {
+  const { offerId } = route.params; // Desestructura `offerId` de `route.params`
 
   const [offer, setOffer] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,6 +13,7 @@ export default function DetailOfferScreen({ offerId, navigation }) {
         try {
           const response = await fetch(`http://localhost:3001/offers/${offerId}`);
           const data = await response.json();
+          // console.log('Offer details:', data);  // Asegúrate de que estos datos son los correctos
           setOffer(data);
           setLoading(false);
         } catch (error) {
@@ -43,14 +43,14 @@ export default function DetailOfferScreen({ offerId, navigation }) {
       </View>
     );
   }
-
+console.log('Esta es la oferta:', offer.company)
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{offer.title}</Text>
-      <Text>{offer.description}</Text>
-      <Text>{offer.price} USD</Text>
-      <Text>Category: {offer.category}</Text>
-      <Text>Company: {offer.company.companyName}</Text>
+      <Text style={styles.title}>{offer?.offer.title || 'Título no disponible'}</Text>
+      <Text>{offer?.offer.description || 'Descripción no disponible'}</Text>
+      <Text>{offer?.offer.price ? `Precio: ${offer.offer.price} USD` : 'Precio no disponible'}</Text>
+      <Text>Category: {offer?.offer.category || 'Categoría no disponible'}</Text>
+      <Text>Company: {offer?.company?.name || 'Compañía no disponible'}</Text>
     </View>
   );
 }
