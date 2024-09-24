@@ -3,13 +3,12 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-nat
 import OfferCard from '../../components/Cards/OfferCard';
 import { AppContext } from '../../context/AppContext';
 import { useFocusEffect } from '@react-navigation/native';
+import { AuthContext } from '../../context/AuthContext';
 const HomeScreen = () => {
-  const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer, fetchMatches, user } = useContext(AppContext);
+  const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer, fetchMatches } = useContext(AppContext);
+  const { user } = useContext(AuthContext);
 
-  console.log("This is the user type:", user.company.type)
-  console.log("Offers in HomeScreen:", offers); 
-  console.log("Current Offer Index:", currentOfferIndex); 
-
+  console.log('Este es su usario:', user)
   if (loadingOffers) {
     return (
       <View style={styles.loadingContainer}>

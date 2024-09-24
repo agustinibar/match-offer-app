@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import Button from '../../components/Buttons/Button'; // Asegúrate de usar tu componente de botón personalizado
 
 const UserTypeSelectionScreen = ({ navigation }) => {
+  
   const handleUserTypeSelection = (type) => {
     navigation.navigate('Login', { userType: type });
   };

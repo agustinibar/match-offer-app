@@ -19,8 +19,8 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setUser(data[type]);
-        console.log('Registro exitoso:', data);
+        setUser(data[type]); 
+        
       } else {
         console.error('Error en el registro:', data.message);
       }
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Error en la solicitud de registro:', error);
     }
   };
-
+  
   const login = async (email, password, type) => {
     try {
       const endpoint = type === 'company' ? 'companies/login' : 'customer/login';
@@ -39,14 +39,16 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+      
       const data = await response.json();
-
+      
       
       if (response.ok) {
-        setUser(data);
+        setUser({
+          ...data, // Incluimos todos los campos del usuario
+          type,    // Agregamos el tipo de usuario, ya sea 'customer' o 'company'
+        });
         console.log('Inicio de sesión exitoso:', data);
-        console.log(user)
       } else {
         console.error('Error en el inicio de sesión:', data.message);
       }
@@ -54,11 +56,12 @@ export const AuthProvider = ({ children }) => {
       console.error('Error en la solicitud de inicio de sesión:', error);
     }
   };
-
+  
   const logout = () => {
     setUser(null);
   };
-
+  
+  console.log('Registro exitoso, su usuario es:', user);
   return (
     <AuthContext.Provider value={{ user, register, login, logout }}>
       {children}

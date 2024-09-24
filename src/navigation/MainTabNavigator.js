@@ -20,7 +20,7 @@ const OfferStack = () => (
 
 const MainTabNavigator = () => {
   const { user } = useContext(AuthContext);
-  const isCompany = user?.company.type === 'company';
+  const isCompany = user?.type === 'company';
 
   return (
     <Tab.Navigator>
