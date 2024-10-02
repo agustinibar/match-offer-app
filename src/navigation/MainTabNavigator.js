@@ -27,9 +27,11 @@ const MainTabNavigator = () => {
       {isCompany ? (
         <Tab.Screen name="Offers" component={OfferStack} />
       ) : (
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="MatchOffer" component={MatchOfferScreen} /> {/* Solo para customers */}
+        </>
       )}
-      <Tab.Screen name="MatchOffer" component={MatchOfferScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

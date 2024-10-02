@@ -8,8 +8,8 @@ export default function DetailOfferScreen({ route, navigation }) {
   const [offer, setOffer] = useState(null);
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [chatVisible, setChatVisible] = useState(false); // Estado para controlar la visibilidad del chat
-  const [selectedMatch, setSelectedMatch] = useState(null); // Estado para almacenar el match seleccionado para el chat
+  const [chatVisible, setChatVisible] = useState(false); 
+  const [selectedMatch, setSelectedMatch] = useState(null); 
 
   useEffect(() => {
     if (offerId) {
@@ -37,13 +37,13 @@ export default function DetailOfferScreen({ route, navigation }) {
   }, [offerId]);
 
   const openChat = (match) => {
-    setSelectedMatch(match); // Seleccionamos el match para el chat
-    setChatVisible(true);    // Mostramos el chat
+    setSelectedMatch(match); 
+    setChatVisible(true);    
   };
 
   const closeChat = () => {
-    setChatVisible(false);   // Ocultamos el chat
-    setSelectedMatch(null);  // Limpiamos el match seleccionado
+    setChatVisible(false);  
+    // setSelectedMatch(null);  
   };
 
   if (loading) {
@@ -90,8 +90,13 @@ export default function DetailOfferScreen({ route, navigation }) {
         visible={chatVisible}
         animationType="slide"
         onRequestClose={closeChat}
+        transparent={true} 
       >
-        <Chat match={selectedMatch} closeChat={closeChat} />
+        <View style={styles.overlay}>
+          <View style={styles.modalContainer}>
+            <Chat match={selectedMatch} closeChat={closeChat} />
+          </View>
+        </View>
       </Modal>
     </View>
   );
@@ -118,5 +123,22 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 5,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semi-transparente
+  },
+  modalContainer: {
+    width: '80%', // El modal ocupa el 80% del ancho
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 5, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
 });

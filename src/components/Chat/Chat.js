@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore'; 
+import { db } from '../../firebase/config';
+import { AuthContext } from '../../context/AuthContext'; // Importar el contexto de autenticación
 
 export default function Chat({ match, closeChat }) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const { user } = useContext(AuthContext); // Obtener la información del usuario desde el contexto
 
+  console.log("Este es el Match:", match)  
   useEffect(() => {
-
     const q = query(collection(db, 'messages'), where('matchId', '==', match._id));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const newMessages = snapshot.docs.map(doc => doc.data());
@@ -19,11 +22,11 @@ export default function Chat({ match, closeChat }) {
 
   const sendMessage = async () => {
     if (message.trim() !== '') {
-   
       await addDoc(collection(db, 'messages'), {
         matchId: match._id,    
         text: message,         
-        timestamp: new Date()  
+        sender: user?.name || 'Anónimo',  // Incluimos el nombre del remitente
+        timestamp: new Date()
       });
 
       setMessage(''); 
@@ -37,7 +40,7 @@ export default function Chat({ match, closeChat }) {
       <View style={styles.messagesContainer}>
         {messages.map((msg, index) => (
           <View key={index} style={styles.message}>
-            <Text>{msg.sender}: {msg.text}</Text>
+            <Text>{msg.sender}: {msg.text}</Text> {/* Mostramos el nombre del remitente */}
           </View>
         ))}
       </View>
