@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image, Button } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import Input from '../../components/Inputs/Input';
-import Button from '../../components/Buttons/Button';
 import { AuthContext } from '../../context/AuthContext';
 
 const RegisterScreen = ({ navigation }) => {
@@ -9,6 +9,7 @@ const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState(null); 
   const [errors, setErrors] = useState({});
   const { register } = useContext(AuthContext);
 
@@ -39,15 +40,31 @@ const RegisterScreen = ({ navigation }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleImagePick = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      base64: true, // Aseguramos que se obtenga la imagen en base64
+    });
+  
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const selectedImage = result.assets[0].base64; // Accedemos a la imagen en base64 correctamente
+      setImage(selectedImage);
+    }
+  };
+
   const handleRegister = (type) => {
     if (validateForm()) {
       const userData = {
         name,
         email,
         password,
+        profileImage: image ? `data:image/jpeg;base64,${image}` : null, // Formato base64 para enviar al backend
       };
+      console.log(userData)
       register(userData, type);
-      navigation.replace('Home');
+      navigation.replace('Type');
     }
   };
 
@@ -94,9 +111,13 @@ const RegisterScreen = ({ navigation }) => {
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
 
+      <Button title="Seleccionar Imagen" onPress={handleImagePick} />
+
+      {image && <Image source={{ uri: `data:image/jpeg;base64,${image}` }} style={{ width: 100, height: 100, marginTop: 10 }} />}
+
       <Button title="Registrar Cliente" onPress={() => handleRegister('customer')} style={styles.button} />
       <Button title="Registrar Empresa" onPress={() => handleRegister('company')} style={styles.button} />
-      
+
       <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginButton}>
         <Text style={styles.loginText}>¿Ya tienes cuenta? Inicia sesión</Text>
       </TouchableOpacity>
