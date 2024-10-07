@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(userData),
       });
-      console.log(res)
+      // console.log(res)
       const data = await response.json();
 
       if (response.ok) {

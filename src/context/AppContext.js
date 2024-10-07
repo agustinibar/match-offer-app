@@ -11,6 +11,7 @@ const AppProvider = ({ children }) => {
   const [matches, setMatches] = useState([]);
   const [filteredOffers, setFilteredOffers] = useState([]);
   const [companyOffers, setCompanyOffers] = useState([]); // Ofertas activas de la empresa
+  const [formData, setFormData] = useState([]);
 
   // Fetch de las ofertas activas de la empresa
   const fetchCompanyOffers = async () => {
@@ -130,6 +131,32 @@ const AppProvider = ({ children }) => {
       console.error('Error en la solicitud de match:', error);
     }
   };
+  
+  /////Crear oferta//////
+  const createOffer = async (offerData) => {
+    try {
+      const response = await fetch('http://localhost:3001/offers/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(offerData),
+      });
+      console.log(response)
+      const data = await response.json();
+
+      if(response.ok) {
+        setFormData(data);
+      } else {
+        const errorData = await response.json();
+        console.error('Error al crear la oferta:', errorData.message);
+      }
+
+    } catch (error) {
+      console.error('Error en la solicitud de carga:', error)
+    }
+  }
 
   return (
     <AppContext.Provider
@@ -142,7 +169,8 @@ const AppProvider = ({ children }) => {
         passOffer,
         matchOffer,
         companyOffers, 
-        fetchCompanyOffers
+        fetchCompanyOffers,
+        createOffer
       }}
     >
       {children}

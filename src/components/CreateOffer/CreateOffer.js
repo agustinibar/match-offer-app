@@ -1,15 +1,17 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { AppContext } from '../../context/AppContext';
 import { AuthContext } from '../../context/AuthContext';
 
 const CreateOffer = () => {
-  const { setOffers } = useContext(AppContext);
+  const { createOffer } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
+  const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -30,36 +32,35 @@ const CreateOffer = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+    console.log(result.assets);
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const selectedImage = result.assets[0].base64;
+      setImage(selectedImage);
+      console.log(image);
+    }
+  };
+  
+  
+
   const handleSubmit = async () => {
     if (validateForm()) {
+    
       const offerData = {
         title,
         description,
         price: Number(price),
         category,
+        image: image ? `data:image/jpeg;base64,${image}` : null,
       };
-
-      try {
-        const response = await fetch('http://localhost:3001/offers/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.token}`, 
-          },
-          body: JSON.stringify(offerData),
-        });
-
-        if (response.ok) {
-          const newOffer = await response.json();
-          Alert.alert('Éxito', 'Oferta creada exitosamente');
-          setOffers(prevOffers => [...prevOffers, newOffer.offer]);
-        } else {
-          const errorData = await response.json();
-          Alert.alert('Error', errorData.message || 'Error al crear la oferta');
-        }
-      } catch (error) {
-        Alert.alert('Error', 'Error al conectar con el servidor');
-      }
+      console.log('Datos de la oferta que se envían:', offerData);
+      await createOffer(offerData);
     }
   };
 
@@ -102,6 +103,13 @@ const CreateOffer = () => {
       />
       {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
 
+      <Button title='Seleccionar imagen' onPress={pickImage} styles={styles.imageButton}/>
+      {/* <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+        <Text style={styles.imageButtonText}>Seleccionar Imagen</Text>
+      </TouchableOpacity> */}
+
+      {image && <Image source={{ uri: `data:image/jpeg;base64,${image}` }} style={{ width: 100, height: 100, marginTop: 10 }} />} 
+
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Crear Oferta</Text>
       </TouchableOpacity>
@@ -139,6 +147,31 @@ const styles = StyleSheet.create({
     color: '#E94F4F',
     fontSize: 12,
     marginBottom: 10,
+  },
+  imageButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  imageButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  imagePreview: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+    marginVertical: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
   },
   button: {
     backgroundColor: '#4CAF50',
