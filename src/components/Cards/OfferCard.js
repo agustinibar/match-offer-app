@@ -5,7 +5,7 @@ import logo from '../../assets/t.jpg'; // Asegúrate de que esta ruta sea correc
 const OfferCard = ({ offer, onPass, onMatch }) => {
   return (
     <View style={styles.card}>
-      <Image source={logo} style={styles.image} />
+      <Image source={offer.imageUrl} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{offer.title}</Text>
         <Text style={styles.description}>{offer.description}</Text>

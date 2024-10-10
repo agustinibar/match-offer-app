@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AppContext } from '../../context/AppContext';
 import { useNavigation } from '@react-navigation/native'; // Importa el hook de navegación
 
@@ -32,6 +32,7 @@ export default function OfferScreen() {
               onPress={() => navigation.navigate('DetailOffer', { offerId: item._id })} // Navegar a DetailOfferScreen con params
               style={styles.offerCard}
             >
+              <Image source={item.imageUrl}  style={styles.offerImage}  />
               <Text style={styles.offerTitle}>{item.title}</Text>
               <Text>{item.description}</Text>
               <Text>{item.price} USD</Text>
@@ -61,6 +62,13 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     marginBottom: 15,
+    alignItems: 'center',
+  },
+  offerImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   offerTitle: {
     fontSize: 18,

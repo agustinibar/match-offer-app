@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, Modal, Image } from 'react-native';
 import Chat from '../../components/Chat/Chat'; // Importamos el componente de chat
 
 export default function DetailOfferScreen({ route, navigation }) {
@@ -64,6 +64,7 @@ export default function DetailOfferScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <Image source={offer?.offer.imageUrl}  style={styles.offerImage}/>
       <Text style={styles.title}>{offer?.offer.title || 'Título no disponible'}</Text>
       <Text>{offer?.offer.description || 'Descripción no disponible'}</Text>
       <Text>{offer?.offer.price ? `Precio: ${offer.offer.price} USD` : 'Precio no disponible'}</Text>
@@ -140,5 +141,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
+  },
+  offerImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginBottom: 10,
   },
 });
