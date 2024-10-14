@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { AppContext } from '../../context/AppContext';
 import { AuthContext } from '../../context/AuthContext';
+import * as Location from 'expo-location';
 
 const CreateOffer = () => {
   const { createOffer } = useContext(AppContext);
@@ -13,6 +14,25 @@ const CreateOffer = () => {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    const getLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Error', 'Permiso para acceder a la ubicación denegado');
+        return;
+      }
+
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLocation({
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+      });
+    };
+
+    getLocation();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -27,6 +47,9 @@ const CreateOffer = () => {
     }
     if (!category) {
       newErrors.category = 'La categoría es obligatoria';
+    }
+    if (!location) {
+      newErrors.location = 'Ubicación no disponible';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,6 +81,8 @@ const CreateOffer = () => {
         price: Number(price),
         category,
         image: image ? `data:image/jpeg;base64,${image}` : null,
+        latitude: location.latitude,
+        longitude: location.longitude,
       };
       console.log('Datos de la oferta que se envían:', offerData);
       await createOffer(offerData);

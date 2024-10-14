@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AppContext } from '../../context/AppContext';
-import { useNavigation } from '@react-navigation/native'; // Importa el hook de navegación
+import { useNavigation } from '@react-navigation/native'; 
 
 export default function OfferScreen() {
   const { companyOffers, loadingOffers, fetchCompanyOffers } = useContext(AppContext);
-  const navigation = useNavigation(); // Inicializa la navegación
+  const navigation = useNavigation(); 
 
   useEffect(() => {
     fetchCompanyOffers();
@@ -29,7 +29,7 @@ export default function OfferScreen() {
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('DetailOffer', { offerId: item._id })} // Navegar a DetailOfferScreen con params
+              onPress={() => navigation.navigate('DetailOffer', { offerId: item._id })} 
               style={styles.offerCard}
             >
               <Image source={item.imageUrl}  style={styles.offerImage}  />

@@ -12,7 +12,7 @@ const AppProvider = ({ children }) => {
   const [filteredOffers, setFilteredOffers] = useState([]);
   const [companyOffers, setCompanyOffers] = useState([]); // Ofertas activas de la empresa
   const [formData, setFormData] = useState([]);
-
+  const [userLocation, setUserLocation] = useState(null);
   // Fetch de las ofertas activas de la empresa
   const fetchCompanyOffers = async () => {
     try {
@@ -170,7 +170,9 @@ const AppProvider = ({ children }) => {
         matchOffer,
         companyOffers, 
         fetchCompanyOffers,
-        createOffer
+        createOffer,
+        setUserLocation,
+        userLocation
       }}
     >
       {children}

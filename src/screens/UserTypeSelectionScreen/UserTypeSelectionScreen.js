@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Button from '../../components/Buttons/Button'; // Asegúrate de usar tu componente de botón personalizado
+import { AppContext } from '../../context/AppContext';
+import * as Location from 'expo-location';
 
 const UserTypeSelectionScreen = ({ navigation }) => {
-  
+  const { setUserLocation } = useContext(AppContext);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+
   const handleUserTypeSelection = (type) => {
     navigation.navigate('Login', { userType: type });
   };
 
+  useEffect(()=>{
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setUserLocation(location.coords);
+    })();
+  },[])
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/t.jpg')} style={styles.heroImage} />
