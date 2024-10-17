@@ -17,9 +17,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#3498db', // Puedes ajustar el color para que coincida con el tema de tu app
-    elevation: 4, // Sombra para dispositivos Android
-    shadowColor: '#000', // Sombra para dispositivos iOS
+    backgroundColor: '#3498db',
+    elevation: 4,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,

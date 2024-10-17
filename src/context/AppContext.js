@@ -39,7 +39,7 @@ const AppProvider = ({ children }) => {
       if (!userLocation) return [];
   
       console.log("Locacion en filterbyDistance", userLocation);
-      
+
       return offers.filter((offer) => {
         const offerLat = offer.location.coordinates[1];
         const offerLon = offer.location.coordinates[0];
@@ -48,7 +48,7 @@ const AppProvider = ({ children }) => {
   
         // haversine en km
         const toRadians = (deg) => (deg * Math.PI) / 180;
-        const R = 6371; // Radio de la Tierra en km
+        const R = 6371; // radio de la tierra en km
         const dLat = toRadians(offerLat - userLat);
         const dLon = toRadians(offerLon - userLon);
         const a =
@@ -56,7 +56,7 @@ const AppProvider = ({ children }) => {
           Math.cos(toRadians(userLat)) * Math.cos(toRadians(offerLat)) *
           Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c; // Distancia en km
+        const distance = R * c; // distancia en km
   
         
         return distance <= distanceFilter && !matches.some((match) => match.offer?._id === offer._id);
@@ -64,7 +64,7 @@ const AppProvider = ({ children }) => {
     };
   
     const filtered = filterOffersByDistance();
-    setFilteredOffers(filtered); // Almacena las ofertas filtradas
+    setFilteredOffers(filtered); 
     console.log("Filtered Offers by Distance:", filtered);
   }, [offers, matches, distanceFilter, userLocation]); // Filtra las ofertas cada vez que cambian las ofertas, matches, distancia o ubicación del usuario
 
