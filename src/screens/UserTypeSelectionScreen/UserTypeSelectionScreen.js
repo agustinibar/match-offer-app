@@ -24,7 +24,8 @@ const UserTypeSelectionScreen = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setUserLocation(location.coords);
     })();
-  },[])
+  },[]);
+  
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/t.jpg')} style={styles.heroImage} />

@@ -41,9 +41,9 @@ const MatchScreen = () => {
             <View style={styles.matchCard}>
               <Image source={require('../../assets/t.jpg')} style={styles.image} />
               <View style={styles.info}>
-                <Text style={styles.title}>{item.offer.title}</Text>
-                <Text style={styles.description}>{item.offer.description}</Text>
-                <Text style={styles.price}>${item.offer.price}</Text>
+                <Text style={styles.title}>{item.offer?.title}</Text>
+                <Text style={styles.description}>{item.offer?.description}</Text>
+                <Text style={styles.price}>${item.offer?.price}</Text>
                 {/* Botón para abrir el chat */}
                 <Button
                   title="Chat"

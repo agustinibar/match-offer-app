@@ -4,19 +4,14 @@ import OfferCard from '../../components/Cards/OfferCard';
 import { AppContext } from '../../context/AppContext';
 import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
+import Navbar from '../../components/Navbar/Navbar';
+
 const HomeScreen = () => {
   const { offers, loadingOffers, currentOfferIndex, passOffer, matchOffer, fetchMatches } = useContext(AppContext);
   const { user } = useContext(AuthContext);
+  const { userLocation } = useContext(AppContext);
 
-  console.log('Este es su usario:', user)
-  if (loadingOffers) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#3498db" />
-        <Text style={styles.loadingText}>Cargando ofertas...</Text>
-      </View>
-    );
-  }
+
 
   const handlePass = () => {
     passOffer();
@@ -27,32 +22,31 @@ const HomeScreen = () => {
       fetchMatches();
     }, [])
   );
+
   const handleMatch = () => {
     if (offers[currentOfferIndex]) {
       matchOffer(offers[currentOfferIndex]._id);
     }
   };
 
-  if (offers.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No hay ofertas disponibles</Text>
-      </View>
-    );
-  }
-
   return (
     <ScrollView style={styles.container}>
-      {currentOfferIndex < offers.length ? (
+      <Navbar />
+      {loadingOffers ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3498db" />
+          <Text style={styles.loadingText}>Cargando ofertas...</Text>
+        </View>
+      ) : offers.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No hay ofertas disponibles</Text>
+        </View>
+      ) : (
         <OfferCard
           offer={offers[currentOfferIndex]}
           onPass={handlePass}
           onMatch={handleMatch}
         />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No hay más ofertas por el momento</Text>
-        </View>
       )}
     </ScrollView>
   );
@@ -81,7 +75,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#888', 
+    color: '#888',
   },
 });
 
